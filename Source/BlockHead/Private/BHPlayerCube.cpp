@@ -28,9 +28,18 @@ void ABHPlayerCube::BeginPlay()
 {
 	Super::BeginPlay();
 	PRINT("I am beginning my play muahaha");
-
+	//InputComponent->BindAxis("MoveLeftRight", this, &ABHPlayerCube::MoveLeftRight);
 	Cube->SetSimulatePhysics(true);
 	Mass = Cube->GetMass();
+}
+
+void ABHPlayerCube::MoveLeftRight(float AxisValue)
+{
+	if (!bLevelEnded)
+	{
+		const FVector Impulse(0.0f, AxisValue * SideForce * Mass * DeltaSeconds, 0.0f);
+		Cube->AddImpulse(Impulse);
+	}
 }
 
 // Called every frame
@@ -42,10 +51,13 @@ void ABHPlayerCube::Tick(float DeltaTime)
 		const FVector Impulse(ForwardForce * Mass * DeltaTime, 0.0f, 0.0f);
 		Cube->AddImpulse(Impulse);
 	}
+
+	DeltaSeconds = DeltaTime;
 }
 
 // Called to bind functionality to input
 void ABHPlayerCube::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	PlayerInputComponent->BindAxis("MoveLeftRight", this, &ABHPlayerCube::MoveLeftRight);
 }

@@ -36,7 +36,7 @@ protected:
 	float ForwardForce{2000};
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
-	float SideForce{5};
+	float SideForce{3000};
 
 
 public:
@@ -50,4 +50,6 @@ private:
 	bool bLevelEnded = false;
 	float Mass;
 	float DeltaSeconds;
+
+	void MoveLeftRight(float AxisValue);
 };
