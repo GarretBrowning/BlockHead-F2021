@@ -19,11 +19,35 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Setup")
+	UStaticMeshComponent* Cube;
+
+
+	// Forward declare and create pointer for spring arm:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Setup")
+	class USpringArmComponent* SpringArm;
+
+	// Forward declare and create pointer for spring arm:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Setup")
+	class UCameraComponent* Camera;
+
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float ForwardForce{2000};
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float SideForce{5};
+
+
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+private:
+	bool bLevelEnded = false;
+	float Mass;
+	float DeltaSeconds;
 };
