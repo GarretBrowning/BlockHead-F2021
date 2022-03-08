@@ -3,9 +3,11 @@
 
 #include "BHPlayerCube.h"
 
+#include "BHGameMode.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #define PRINT(text) if (GEngine) { GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::Green,text); UE_LOG(LogTemp, Warning, TEXT(text)); }
+
 // Sets default values
 ABHPlayerCube::ABHPlayerCube()
 {
@@ -28,9 +30,15 @@ void ABHPlayerCube::BeginPlay()
 {
 	Super::BeginPlay();
 	PRINT("I am beginning my play muahaha");
-	//InputComponent->BindAxis("MoveLeftRight", this, &ABHPlayerCube::MoveLeftRight);
+
+	GameMode = Cast<ABHGameMode>(GetWorld()->GetAuthGameMode());
+
 	Cube->SetSimulatePhysics(true);
 	Mass = Cube->GetMass();
+
+	// Required to connect the specific component that we care about overlapping.
+	Cube->OnComponentBeginOverlap.AddDynamic(this, &ABHPlayerCube::OnBeginOverlap);
+	Cube->OnComponentHit.AddDynamic(this, &ABHPlayerCube::OnHit);
 }
 
 void ABHPlayerCube::MoveLeftRight(float AxisValue)
@@ -40,6 +48,16 @@ void ABHPlayerCube::MoveLeftRight(float AxisValue)
 		const FVector Impulse(0.0f, AxisValue * SideForce * Mass * FApp::GetDeltaTime(), 0.0f);
 		Cube->AddImpulse(Impulse);
 	}
+}
+
+void ABHPlayerCube::OnHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	PRINT("I HAVE HIT!");
+}
+
+void ABHPlayerCube::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	PRINT("I HAVE OVERLAPPED!");
 }
 
 // Called every frame

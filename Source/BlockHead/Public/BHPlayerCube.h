@@ -38,6 +38,19 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Movement")
 	float SideForce{3000};
 
+	UFUNCTION() // Our own function to be bound to Cube's on hit event.
+	void OnHit(class UPrimitiveComponent* MyComp, AActor* Other,
+	           UPrimitiveComponent* OtherComp,
+	           FVector NormalImpulse,
+	           const FHitResult& Hit);
+	UFUNCTION()
+	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp,
+	                    AActor* OtherActor,
+	                    UPrimitiveComponent* OtherComp,
+	                    int32 OtherBodyIndex,
+	                    bool bFromSweep,
+	                    const FHitResult& SweepResult);
+
 
 public:
 	// Called every frame
@@ -47,6 +60,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+	class ABHGameMode* GameMode; // Forward declare ABHGameMode for a pointer to the game mode.
 	bool bLevelEnded = false;
 	float Mass;
 	float DeltaSeconds;
