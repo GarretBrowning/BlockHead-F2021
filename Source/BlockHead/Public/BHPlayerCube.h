@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "BHPlayerCube.generated.h"
 
+
 UCLASS()
 class BLOCKHEAD_API ABHPlayerCube : public APawn
 {

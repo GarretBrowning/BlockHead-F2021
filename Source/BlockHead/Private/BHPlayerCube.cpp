@@ -2,7 +2,8 @@
 
 
 #include "BHPlayerCube.h"
-
+#include "BHEndPoint.h"
+#include "BHObstacle.h"
 #include "BHGameMode.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -52,12 +53,20 @@ void ABHPlayerCube::MoveLeftRight(float AxisValue)
 
 void ABHPlayerCube::OnHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	PRINT("I HAVE HIT!");
+	ABHObstacle* Obstacle = Cast<ABHObstacle>(Other);
+	if (Obstacle)
+	{
+		PRINT("I HAVE HIT!");
+	}
 }
 
 void ABHPlayerCube::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	PRINT("I HAVE OVERLAPPED!");
+	ABHEndPoint* EndPoint = Cast<ABHEndPoint>(OtherActor);
+	if (EndPoint)
+	{
+		PRINT("I HAVE OVERLAPPED!");
+	}
 }
 
 // Called every frame

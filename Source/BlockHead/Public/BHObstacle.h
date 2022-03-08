@@ -18,4 +18,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+private:
+	// Using the AllowPrivateAccess meta tag allows us to make a private property blueprint
+	// accessible if we wanted:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Configure", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* Cube;
 };
