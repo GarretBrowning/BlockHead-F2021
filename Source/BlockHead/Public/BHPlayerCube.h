@@ -64,7 +64,10 @@ private:
 	class ABHGameMode* GameMode; // Forward declare ABHGameMode for a pointer to the game mode.
 	bool bLevelEnded = false;
 	float Mass;
-	float DeltaSeconds;
+
+	FTimerHandle PlayerDiedTimer;
 
 	void MoveLeftRight(float AxisValue);
+	void PlayerDied();
+	void KillPlayer();
 };

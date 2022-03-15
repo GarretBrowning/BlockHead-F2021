@@ -51,12 +51,28 @@ void ABHPlayerCube::MoveLeftRight(float AxisValue)
 	}
 }
 
+void ABHPlayerCube::PlayerDied()
+{
+	if (bLevelEnded)
+	{
+		return;
+	}
+	bLevelEnded = true;
+	GetWorldTimerManager().SetTimer(PlayerDiedTimer, this, &ABHPlayerCube::KillPlayer, 2.0f, false);
+}
+
+void ABHPlayerCube::KillPlayer()
+{
+	GameMode->EndGame();
+}
+
 void ABHPlayerCube::OnHit(UPrimitiveComponent* MyComp, AActor* Other, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	ABHObstacle* Obstacle = Cast<ABHObstacle>(Other);
 	if (Obstacle)
 	{
 		PRINT("I HAVE HIT!");
+		PlayerDied();
 	}
 }
 
@@ -66,6 +82,8 @@ void ABHPlayerCube::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* 
 	if (EndPoint)
 	{
 		PRINT("I HAVE OVERLAPPED!");
+		bLevelEnded = true;
+		GameMode->LevelComplete();
 	}
 }
 
@@ -75,8 +93,16 @@ void ABHPlayerCube::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (!bLevelEnded)
 	{
+		// Forward Motion
 		const FVector Impulse(ForwardForce * Mass * FApp::GetDeltaTime(), 0.0f, 0.0f);
 		Cube->AddImpulse(Impulse);
+
+		// Kill Z
+		const FVector ActorLocation = GetActorLocation();
+		if (ActorLocation.Z < -100)
+		{
+			PlayerDied();
+		}
 	}
 }
 
