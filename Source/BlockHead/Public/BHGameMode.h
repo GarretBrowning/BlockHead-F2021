@@ -47,4 +47,6 @@ private:
 	FString NextLevel;
 
 	FTimerHandle LevelSwapTimer;
+
+	void LoadFinalMenu(bool bWin);
 };
